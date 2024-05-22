@@ -174,6 +174,7 @@ reg load HKLM\zDEFAULT $ScratchDisk\scratchdir\Windows\System32\config\default >
 reg load HKLM\zNTUSER $ScratchDisk\scratchdir\Users\Default\ntuser.dat >null
 reg load HKLM\zSOFTWARE $ScratchDisk\scratchdir\Windows\System32\config\SOFTWARE >null
 reg load HKLM\zSYSTEM $ScratchDisk\scratchdir\Windows\System32\config\SYSTEM >null
+Read-Host -Prompt "Registry loaded! Now is the time you can do anything!"
 Write-Host "Bypassing system requirements(on the system image):"
 & 'reg' 'add' 'HKLM\zDEFAULT\Control Panel\UnsupportedHardwareNotificationCache' '/v' 'SV1' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zDEFAULT\Control Panel\UnsupportedHardwareNotificationCache' '/v' 'SV2' '/t' 'REG_DWORD' '/d' '0' '/f' >null
@@ -228,6 +229,15 @@ reg delete "HKEY_LOCAL_MACHINE\zSOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVe
 reg delete "HKEY_LOCAL_MACHINE\zSOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update" /f >null
 Write-Host "Disabling OneDrive folder backup"
 & 'reg' 'add' "HKLM\zSOFTWARE\Policies\Microsoft\Windows\OneDrive" '/v' 'DisableFileSyncNGSC' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+Write-Host "Disabling automatic driver installation"
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\PolicyManager\current\device\Update' '/v' 'ExcludeWUDriversInQualityUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\PolicyManager\default\Update' '/v' 'ExcludeWUDriversInQualityUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\WindowsUpdate\UX\Settings' '/v' 'ExcludeWUDriversInQualityUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\WindowsUpdate' '/v' 'ExcludeWUDriversInQualityUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\PolicyManager\default\Update\ExcludeWUDriversInQualityUpdate' '/v' 'value' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata' '/v' 'PreventDeviceMetadataFromNetwork' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching' '/v' 'SearchOrderConfig' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching' '/v' 'DontSearchWindowsUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 Write-Host "Disabling Telemetry:"
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Privacy' '/v' 'TailoredExperiencesWithDiagnosticDataEnabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
@@ -239,6 +249,20 @@ Write-Host "Disabling Telemetry:"
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Personalization\Settings' '/v' 'AcceptedPrivacyPolicy' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\DataCollection' '/v' 'AllowTelemetry' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zSYSTEM\ControlSet001\Services\dmwappushservice' '/v' 'Start' '/t' 'REG_DWORD' '/d' '4' '/f' >null
+Write-Host "Adding desktop icons..."
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{59031a47-3f72-44a7-89c5-5595fe6b30ee}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{20D04FE0-3AEA-1069-A2D8-08002B30309D}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{645FF040-5081-101B-9F08-00AA002F954E}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+Write-Host "Optimising network..."
+
+Write-Host "Optimising system..."
+## disable wakeup maintenance
+& 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\Task Scheduler\Maintenance' '/v' 'WakeUp' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+## config Multimedia Class Scheduler Service
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile' '/v' 'SystemResponsiveness' '/t' 'REG_DWORD' '/d' '10' '/f' >null
+## disable automatic folder discovery
+
 ## this function allows PowerShell to take ownership of the Scheduled Tasks registry key from TrustedInstaller. Based on Jose Espitia's script.
 function Enable-Privilege {
  param(
