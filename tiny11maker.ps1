@@ -111,7 +111,6 @@ foreach ($line in $lines) {
 if (-not $architecture) {
     Write-Host "Architecture information not found."
 }
-
 Write-Host "Mounting complete! Performing removal of applications..."
 
 $packages = & 'dism' '/English' "/image:$($env:SystemDrive)\scratchdir" '/Get-ProvisionedAppxPackages' |
@@ -120,7 +119,7 @@ $packages = & 'dism' '/English' "/image:$($env:SystemDrive)\scratchdir" '/Get-Pr
             $matches[1]
         }
     }
-$packagePrefixes = 'Clipchamp.Clipchamp_', 'Microsoft.BingNews_', 'Microsoft.BingWeather_', 'Microsoft.GamingApp_', 'Microsoft.GetHelp_', 'Microsoft.Getstarted_', 'Microsoft.MicrosoftOfficeHub_', 'Microsoft.MicrosoftSolitaireCollection_', 'Microsoft.People_', 'Microsoft.PowerAutomateDesktop_', 'Microsoft.Todos_', 'Microsoft.WindowsAlarms_', 'microsoft.windowscommunicationsapps_', 'Microsoft.WindowsFeedbackHub_', 'Microsoft.WindowsMaps_', 'Microsoft.WindowsSoundRecorder_', 'Microsoft.Xbox.TCUI_', 'Microsoft.XboxGamingOverlay_', 'Microsoft.XboxGameOverlay_', 'Microsoft.XboxSpeechToTextOverlay_', 'Microsoft.YourPhone_', 'Microsoft.ZuneMusic_', 'Microsoft.ZuneVideo_', 'MicrosoftCorporationII.MicrosoftFamily_', 'MicrosoftCorporationII.QuickAssist_', 'MicrosoftTeams_', 'Microsoft.549981C3F5F10_'
+$packagePrefixes = 'Clipchamp.Clipchamp_', 'Disney.37853FC22B2CE_', 'SpotifyAB.SpotifyMusic_', 'Microsoft.BingNews_', 'Microsoft.BingWeather_', 'Microsoft.GamingApp_', 'Microsoft.GetHelp_', 'Microsoft.Getstarted_', 'Microsoft.MicrosoftOfficeHub_', 'Microsoft.MicrosoftSolitaireCollection_', 'Microsoft.People_', 'Microsoft.PowerAutomateDesktop_', 'Microsoft.Todos_', 'Microsoft.WindowsAlarms_', 'microsoft.windowscommunicationsapps_', 'Microsoft.WindowsFeedbackHub_', 'Microsoft.WindowsMaps_', 'Microsoft.WindowsSoundRecorder_', 'Microsoft.Xbox.TCUI_', 'Microsoft.XboxGamingOverlay_', 'Microsoft.XboxGameOverlay_', 'Microsoft.XboxSpeechToTextOverlay_', 'Microsoft.YourPhone_', 'Microsoft.ZuneMusic_', 'Microsoft.ZuneVideo_', 'MicrosoftCorporationII.MicrosoftFamily_', 'MicrosoftCorporationII.QuickAssist_', 'MicrosoftTeams_', 'Microsoft.549981C3F5F10_', 'Microsoft.XboxApp_', 'Microsoft.MSPaint_', 'Microsoft.MixedReality.Portal_', 'Microsoft.Windows.DevHome_', 'Microsoft.OutlookForWindows_', 'Microsoft.Microsoft3DViewer_', 'Microsoft.MicrosoftStickyNotes_', 'Microsoft.Office.OneNote_', 'Microsoft.SkypeApp_', 'Microsoft.WindowsCamera_'
 
 $packagesToRemove = $packages | Where-Object {
     $packageName = $_
@@ -129,8 +128,6 @@ $packagesToRemove = $packages | Where-Object {
 foreach ($package in $packagesToRemove) {
     & 'dism' '/English' "/image:$($env:SystemDrive)\scratchdir" '/Remove-ProvisionedAppxPackage' "/PackageName:$package"
 }
-
-
 Write-Host "Removing Edge:"
 Remove-Item -Path "$ScratchDisk\scratchdir\Program Files (x86)\Microsoft\Edge" -Recurse -Force >null
 Remove-Item -Path "$ScratchDisk\scratchdir\Program Files (x86)\Microsoft\EdgeUpdate" -Recurse -Force >null
@@ -229,7 +226,7 @@ reg delete "HKEY_LOCAL_MACHINE\zSOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVe
 reg delete "HKEY_LOCAL_MACHINE\zSOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update" /f >null
 Write-Host "Disabling OneDrive folder backup"
 & 'reg' 'add' "HKLM\zSOFTWARE\Policies\Microsoft\Windows\OneDrive" '/v' 'DisableFileSyncNGSC' '/t' 'REG_DWORD' '/d' '1' '/f' >null
-Write-Host "Disabling automatic driver installation"
+Write-Host "Disabling automatic driver installation:"
 & 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\PolicyManager\current\device\Update' '/v' 'ExcludeWUDriversInQualityUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 & 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\PolicyManager\default\Update' '/v' 'ExcludeWUDriversInQualityUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 & 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\WindowsUpdate\UX\Settings' '/v' 'ExcludeWUDriversInQualityUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
@@ -249,19 +246,43 @@ Write-Host "Disabling Telemetry:"
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Personalization\Settings' '/v' 'AcceptedPrivacyPolicy' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\DataCollection' '/v' 'AllowTelemetry' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zSYSTEM\ControlSet001\Services\dmwappushservice' '/v' 'Start' '/t' 'REG_DWORD' '/d' '4' '/f' >null
-Write-Host "Adding desktop icons..."
-& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{59031a47-3f72-44a7-89c5-5595fe6b30ee}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
-& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{20D04FE0-3AEA-1069-A2D8-08002B30309D}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
-& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
-& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{645FF040-5081-101B-9F08-00AA002F954E}' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+Write-Host "Adding desktop icons:"
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{59031a47-3f72-44a7-89c5-5595fe6b30ee}' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{20D04FE0-3AEA-1069-A2D8-08002B30309D}' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' '/v' '{645FF040-5081-101B-9F08-00AA002F954E}' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 Write-Host "Optimising network..."
-
+& 'reg' 'add' 'HKLM\zSYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters' '/v' 'DisableBandwidthThrottling' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSYSTEM\CurrentControlSet\Services\LanManServer\Parameters' '/v' 'RestrictNullSessAccess' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSYSTEM\CurrentControlSet\Control\Lsa' '/v' 'RestrictAnonymous' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' "HKLM\zSOFTWARE\Policies\Microsoft\Windows NT\DNSClient" '/v' 'EnableMulticast' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 Write-Host "Optimising system..."
+& 'reg' 'add' 'HKLM\zSYSTEM\CurrentControlSet\Control\CI\Policy' '/v' 'VerifiedAndReputablePolicyState' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zSYSTEM\CurrentControlSet\Control\PriorityControl' '/v' 'Win32PrioritySeparation' '/t' 'REG_DWORD' '/d' '38' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '01' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '1024' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '2048' '/t' 'REG_DWORD' '/d' '7' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '04' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '32' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '02' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '128' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '08' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '256' '/t' 'REG_DWORD' '/d' '7' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" '/v' 'FolderType' '/t' 'REG_SZ' '/d' 'NotSpecified' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" '/v' 'GlobalUserDisabled' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Search" '/v' 'BackgroundAppGlobalToggle' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\System\GameConfigStore" '/v' 'GameDVR_Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\GameDVR" '/v' 'AppCaptureEnabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\GameBar" '/v' 'GamePanelStartupTipIndex' '/t' 'REG_DWORD' '/d' '3' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\GameBar" '/v' 'ShowStartupPanel' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\GameBar" '/v' 'UseNexusForGameBarEnabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' "HKLM\zSOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" '/v' 'ActivationType' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' "HKLM\zSOFTWARE\Policies\Microsoft\Windows\GameDVR" '/v' 'AllowGameDVR' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' "HKLM\zSOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" '/v' 'value' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 ## disable wakeup maintenance
 & 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\Task Scheduler\Maintenance' '/v' 'WakeUp' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 ## config Multimedia Class Scheduler Service
 & 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile' '/v' 'SystemResponsiveness' '/t' 'REG_DWORD' '/d' '10' '/f' >null
-## disable automatic folder discovery
 
 ## this function allows PowerShell to take ownership of the Scheduled Tasks registry key from TrustedInstaller. Based on Jose Espitia's script.
 function Enable-Privilege {
