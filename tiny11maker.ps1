@@ -237,6 +237,7 @@ Write-Host "Disabling automatic driver installation:"
 & 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching' '/v' 'DontSearchWindowsUpdate' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 Write-Host "Disabling Telemetry:"
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo' '/v' 'DisabledByGroupPolicy' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Privacy' '/v' 'TailoredExperiencesWithDiagnosticDataEnabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy' '/v' 'HasAccepted' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Input\TIPC' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
@@ -259,6 +260,7 @@ Write-Host "Optimising network..."
 Write-Host "Optimising system..."
 & 'reg' 'add' 'HKLM\zSYSTEM\CurrentControlSet\Control\CI\Policy' '/v' 'VerifiedAndReputablePolicyState' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zSYSTEM\CurrentControlSet\Control\PriorityControl' '/v' 'Win32PrioritySeparation' '/t' 'REG_DWORD' '/d' '38' '/f' >null
+## Configure Storage Sense:
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '01' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '1024' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '2048' '/t' 'REG_DWORD' '/d' '7' '/f' >null
@@ -268,9 +270,30 @@ Write-Host "Optimising system..."
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '128' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '08' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 & 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' '/v' '256' '/t' 'REG_DWORD' '/d' '7' '/f' >null
-& 'reg' 'add' "HKLM\zNTUSER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" '/v' 'FolderType' '/t' 'REG_SZ' '/d' 'NotSpecified' '/f' >null
+## Disable Advertising:
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\PolicyManager\current\device\Bluetooth' '/v' 'AllowAdvertising' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced' '/v' 'ShowSyncProviderNotifications' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+## Disable Cloud Sync (Windows Backup)
+& 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\SettingSync' '/v' 'DisableSettingSync' '/t' 'REG_DWORD' '/d' '2' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\SettingSync' '/v' 'DisableSettingSyncUserOverride' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\SettingSync' '/v' 'DisableSyncOnPaidNetwork' '/t' 'REG_DWORD' '/d' '1' '/f' >null
+& 'reg' 'add' 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\SettingSync' '/v' 'DisableWindowsSettingSync' '/t' 'REG_DWORD' '/d' '2' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\SettingSync\Groups\Personalization' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\SettingSync\Groups\BrowserSettings' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\SettingSync\Groups\Credentials' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\SettingSync\Groups\Accessibility' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\SettingSync\Groups\Windows' '/v' 'Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\SettingSync' '/v' 'SyncPolicy' '/t' 'REG_DWORD' '/d' '5' '/f' >null
+## Disable suggested ways to setup device:
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement' '/v' 'ScoobeSystemSettingEnabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+## Disable Message Service Cloud Sync:
+& 'reg' 'add' 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement' '/v' 'ScoobeSystemSettingEnabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+## Disable folder preview
+& 'reg' 'add' "HKLM\zSOFTWARE\Policies\Microsoft\Windows\Messaging" '/v' 'AllowMessageSync' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+## Disable background app
 & 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" '/v' 'GlobalUserDisabled' '/t' 'REG_DWORD' '/d' '1' '/f' >null
 & 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Search" '/v' 'BackgroundAppGlobalToggle' '/t' 'REG_DWORD' '/d' '0' '/f' >null
+## Disable GameBar, GameDVR,..
 & 'reg' 'add' "HKLM\zNTUSER\System\GameConfigStore" '/v' 'GameDVR_Enabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\GameDVR" '/v' 'AppCaptureEnabled' '/t' 'REG_DWORD' '/d' '0' '/f' >null
 & 'reg' 'add' "HKLM\zNTUSER\Software\Microsoft\GameBar" '/v' 'GamePanelStartupTipIndex' '/t' 'REG_DWORD' '/d' '3' '/f' >null
